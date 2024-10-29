@@ -9,13 +9,13 @@ const StatsScreen = () => {
   const totalExpenses = expenses.reduce((sum, expense) => sum + expense.amount, 0);
   const balance = budget - totalExpenses;
 
-  const categoryTotals = expenses.reduce((acc, expense) => {
+  const categoryTotals: { [key: string]: number } = expenses.reduce((acc, expense) => {
     if (!acc[expense.category]) {
       acc[expense.category] = 0;
     }
     acc[expense.category] += expense.amount;
     return acc;
-  }, {});
+  }, {} as { [key: string]: number });
 
   const pieChartData = Object.entries(categoryTotals).map(([category, total], index) => ({
     name: category,
@@ -74,6 +74,7 @@ const StatsScreen = () => {
         width={Dimensions.get('window').width - 40}
         height={220}
         yAxisLabel="$"
+        yAxisSuffix="" // Agregado
         chartConfig={{
           backgroundColor: '#FF69B4',
           backgroundGradientFrom: '#FF69B4',

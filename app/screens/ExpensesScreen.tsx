@@ -4,17 +4,26 @@ import { useExpenses } from '../contexts/ExpenseContext';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 
+interface Expense {
+  id: string;
+  description: string;
+  amount: number;
+  category: string;
+  date: string; 
+}
+
 const ExpensesScreen = () => {
   const { expenses, addExpense, removeExpense, updateExpense } = useExpenses();
   const [modalVisible, setModalVisible] = useState(false);
-  const [editingExpense, setEditingExpense] = useState(null);
+  const [editingExpense, setEditingExpense] = useState<Expense | null>(null);
   const [description, setDescription] = useState('');
   const [amount, setAmount] = useState('');
   const [category, setCategory] = useState('');
 
   const handleAddExpense = () => {
     if (description && amount && category) {
-      const newExpense = {
+      const newExpense: Expense = {
+        id: Math.random().toString(),
         description,
         amount: parseFloat(amount),
         category,
@@ -30,7 +39,7 @@ const ExpensesScreen = () => {
 
   const handleEditExpense = () => {
     if (description && amount && category && editingExpense) {
-      const updatedExpense = {
+      const updatedExpense: Expense = {
         ...editingExpense,
         description,
         amount: parseFloat(amount),
@@ -45,7 +54,7 @@ const ExpensesScreen = () => {
     }
   };
 
-  const openEditModal = (expense) => {
+  const openEditModal = (expense: Expense) => {
     setEditingExpense(expense);
     setDescription(expense.description);
     setAmount(expense.amount.toString());

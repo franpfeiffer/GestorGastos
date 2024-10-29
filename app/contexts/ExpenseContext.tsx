@@ -24,7 +24,11 @@ interface ExpenseContextType {
 
 const ExpenseContext = createContext<ExpenseContextType | undefined>(undefined);
 
-export const ExpenseProvider: React.FC = ({ children }) => {
+interface ExpenseProviderProps {
+  children: React.ReactNode;
+}
+
+export const ExpenseProvider: React.FC<ExpenseProviderProps> = ({ children }) => {
   const [expenses, setExpenses] = useState<Expense[]>([]);
   const [budget, setBudget] = useState(0);
   const [userName, setUserName] = useState('');

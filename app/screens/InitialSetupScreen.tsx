@@ -1,8 +1,13 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import { useExpenses } from '../contexts/ExpenseContext';
+import { StackNavigationProp } from '@react-navigation/stack';
 
-const InitialSetupScreen = ({ navigation }) => {
+type InitialSetupScreenProps = {
+  navigation: StackNavigationProp<any>;
+};
+
+const InitialSetupScreen: React.FC<InitialSetupScreenProps> = ({ navigation }) => {
   const { updateUserName, setIsFirstLaunch } = useExpenses();
   const [name, setName] = useState('');
 
