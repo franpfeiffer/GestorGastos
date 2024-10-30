@@ -43,12 +43,14 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFF',
     padding: 20,
   },
+
   title: {
     fontSize: 24,
     fontWeight: 'bold',
     color: '#FF69B4',
     marginBottom: 20,
   },
+
   budgetContainer: {
     backgroundColor: '#FFB6C1',
     padding: 20,
@@ -63,6 +65,7 @@ const styles = StyleSheet.create({
   budgetAmount: {
     fontSize: 32,
     fontWeight: 'bold',
+
     color: '#333',
   },
   updateContainer: {

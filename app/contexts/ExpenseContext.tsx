@@ -16,41 +16,38 @@ interface ExpenseContextType {
   updateExpense: (expense: Expense) => void;
   budget: number;
   updateBudget: (amount: number) => void;
-  userName: string;
-  updateUserName: (name: string) => void;
-  isFirstLaunch: boolean;
-  setIsFirstLaunch: (value: boolean) => void;
 }
 
 const ExpenseContext = createContext<ExpenseContextType | undefined>(undefined);
 
-interface ExpenseProviderProps {
-  children: React.ReactNode;
-}
-
-export const ExpenseProvider: React.FC<ExpenseProviderProps> = ({ children }) => {
+export const ExpenseProvider: React.FC = ({ children }) => {
   const [expenses, setExpenses] = useState<Expense[]>([]);
   const [budget, setBudget] = useState(0);
-  const [userName, setUserName] = useState('');
-  const [isFirstLaunch, setIsFirstLaunch] = useState(true);
 
   useEffect(() => {
-    loadData();
+    loadExpenses();
+    loadBudget();
   }, []);
 
-  const loadData = async () => {
+  const loadExpenses = async () => {
     try {
       const storedExpenses = await AsyncStorage.getItem('expenses');
-      const storedBudget = await AsyncStorage.getItem('budget');
-      const storedUserName = await AsyncStorage.getItem('userName');
-      const storedIsFirstLaunch = await AsyncStorage.getItem('isFirstLaunch');
-
-      if (storedExpenses) setExpenses(JSON.parse(storedExpenses));
-      if (storedBudget) setBudget(parseFloat(storedBudget));
-      if (storedUserName) setUserName(storedUserName);
-      if (storedIsFirstLaunch) setIsFirstLaunch(JSON.parse(storedIsFirstLaunch));
+      if (storedExpenses) {
+        setExpenses(JSON.parse(storedExpenses));
+      }
     } catch (error) {
-      console.error('Error loading data:', error);
+      console.error('Error loading expenses:', error);
+    }
+  };
+
+  const loadBudget = async () => {
+    try {
+      const storedBudget = await AsyncStorage.getItem('budget');
+      if (storedBudget) {
+        setBudget(parseFloat(storedBudget));
+      }
+    } catch (error) {
+      console.error('Error loading budget:', error);
     }
   };
 
@@ -80,31 +77,8 @@ export const ExpenseProvider: React.FC<ExpenseProviderProps> = ({ children }) =>
     await AsyncStorage.setItem('budget', amount.toString());
   };
 
-  const updateUserName = async (name: string) => {
-    setUserName(name);
-    await AsyncStorage.setItem('userName', name);
-  };
-
-  const setIsFirstLaunchAndSave = async (value: boolean) => {
-    setIsFirstLaunch(value);
-    await AsyncStorage.setItem('isFirstLaunch', JSON.stringify(value));
-  };
-
   return (
-    <ExpenseContext.Provider 
-      value={{ 
-        expenses, 
-        addExpense, 
-        removeExpense, 
-        updateExpense, 
-        budget, 
-        updateBudget,
-        userName,
-        updateUserName,
-        isFirstLaunch,
-        setIsFirstLaunch: setIsFirstLaunchAndSave
-      }}
-    >
+    <ExpenseContext.Provider value={{ expenses, addExpense, removeExpense, updateExpense, budget, updateBudget }}>
       {children}
     </ExpenseContext.Provider>
   );

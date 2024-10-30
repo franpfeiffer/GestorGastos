@@ -1,34 +1,18 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, TextInput, Modal } from 'react-native';
+import React from 'react';
+import { View, Text, StyleSheet, FlatList } from 'react-native';
 import { useExpenses } from '../contexts/ExpenseContext';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 
 const HomeScreen = () => {
-  const { expenses, budget, userName, updateUserName } = useExpenses();
-  const [isEditingName, setIsEditingName] = useState(false);
-  const [newName, setNewName] = useState(userName);
-
+  const { expenses, budget } = useExpenses();
   const totalExpenses = expenses.reduce((sum, expense) => sum + expense.amount, 0);
   const balance = budget - totalExpenses;
-
   const recentTransactions = expenses.slice(0, 5).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-
-  const handleUpdateName = () => {
-    if (newName.trim()) {
-      updateUserName(newName.trim());
-      setIsEditingName(false);
-    }
-  };
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.title}>Bienvenido/a, {userName}</Text>
-        <TouchableOpacity onPress={() => setIsEditingName(true)}>
-          <Text style={styles.editName}>Editar nombre</Text>
-        </TouchableOpacity>
-      </View>
+      <Text style={styles.title}>Bienvenido/a!</Text>
       <View style={styles.balanceContainer}>
         <Text style={styles.balanceTitle}>Balance actual</Text>
         <Text style={styles.balanceAmount}>${balance.toFixed(2)}</Text>
@@ -57,29 +41,6 @@ const HomeScreen = () => {
           )}
         />
       </View>
-      <Modal
-        visible={isEditingName}
-        transparent={true}
-        animationType="slide"
-      >
-        <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>Editar nombre</Text>
-            <TextInput
-              style={styles.input}
-              value={newName}
-              onChangeText={setNewName}
-              placeholder="Ingresa tu nuevo nombre"
-            />
-            <TouchableOpacity style={styles.button} onPress={handleUpdateName}>
-              <Text style={styles.buttonText}>Guardar</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.cancelButton} onPress={() => setIsEditingName(false)}>
-              <Text style={styles.cancelButtonText}>Cancelar</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </Modal>
     </View>
   );
 };
@@ -90,21 +51,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFF',
     padding: 20,
   },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 20,
-  },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
     color: '#FF69B4',
-  },
-  editName: {
-    fontSize: 14,
-    color: '#FF69B4',
-    textDecorationLine: 'underline',
+    marginBottom: 20,
   },
   balanceContainer: {
     backgroundColor: '#FF69B4',
@@ -166,51 +117,6 @@ const styles = StyleSheet.create({
   transactionAmount: {
     fontSize: 16,
     fontWeight: 'bold',
-  },
-  modalContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-  },
-  modalContent: {
-    backgroundColor: '#FFF',
-    padding: 20,
-    borderRadius: 10,
-    width: '80%',
-  },
-  modalTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 15,
-    color: '#FF69B4',
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: '#DDD',
-    borderRadius: 5,
-    padding: 10,
-    marginBottom: 15,
-  },
-  button: {
-    backgroundColor: '#FF69B4',
-    padding: 10,
-    borderRadius: 5,
-    alignItems: 'center',
-    marginBottom: 10,
-  },
-  buttonText: {
-    color: '#FFF',
-    fontWeight: 'bold',
-  },
-  cancelButton: {
-    backgroundColor: '#DDD',
-    padding: 10,
-    borderRadius: 5,
-    alignItems: 'center',
-  },
-  cancelButtonText: {
-    color: '#333',
   },
 });
 

@@ -9,13 +9,16 @@ const StatsScreen = () => {
   const totalExpenses = expenses.reduce((sum, expense) => sum + expense.amount, 0);
   const balance = budget - totalExpenses;
 
-  const categoryTotals: { [key: string]: number } = expenses.reduce((acc, expense) => {
+
+  const categoryTotals = expenses.reduce((acc, expense) => {
+
     if (!acc[expense.category]) {
+
       acc[expense.category] = 0;
     }
     acc[expense.category] += expense.amount;
     return acc;
-  }, {} as { [key: string]: number });
+  }, {});
 
   const pieChartData = Object.entries(categoryTotals).map(([category, total], index) => ({
     name: category,
@@ -26,7 +29,9 @@ const StatsScreen = () => {
   }));
 
   const barChartData = {
+
     labels: ['Presupuesto', 'Gastos', 'Balance'],
+
     datasets: [
       {
         data: [budget, totalExpenses, balance],
@@ -35,6 +40,7 @@ const StatsScreen = () => {
   };
 
   return (
+
     <ScrollView style={styles.container}>
       <Text style={styles.title}>Estadísticas</Text>
       <View style={styles.summaryContainer}>
@@ -57,9 +63,11 @@ const StatsScreen = () => {
       <PieChart
         data={pieChartData}
         width={Dimensions.get('window').width - 40}
+
         height={220}
         chartConfig={{
           backgroundColor: '#FFF',
+
           backgroundGradientFrom: '#FFF',
           backgroundGradientTo: '#FFF',
           color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
@@ -68,15 +76,17 @@ const StatsScreen = () => {
         backgroundColor="transparent"
         paddingLeft="15"
       />
+
       <Text style={styles.chartTitle}>Resumen Financiero</Text>
       <BarChart
         data={barChartData}
         width={Dimensions.get('window').width - 40}
         height={220}
+
         yAxisLabel="$"
-        yAxisSuffix="" // Agregado
         chartConfig={{
           backgroundColor: '#FF69B4',
+
           backgroundGradientFrom: '#FF69B4',
           backgroundGradientTo: '#FFB6C1',
           decimalPlaces: 2,
@@ -86,9 +96,11 @@ const StatsScreen = () => {
           },
         }}
         style={{
+
           marginVertical: 8,
           borderRadius: 16,
         }}
+
       />
     </ScrollView>
   );
@@ -104,6 +116,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     color: '#FF69B4',
+
     marginBottom: 20,
   },
   summaryContainer: {
@@ -121,6 +134,7 @@ const styles = StyleSheet.create({
   summaryAmount: {
     fontSize: 18,
     fontWeight: 'bold',
+
     color: '#333',
   },
   chartTitle: {

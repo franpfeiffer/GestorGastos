@@ -1,21 +1,21 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import { useExpenses } from '../contexts/ExpenseContext';
-import { StackNavigationProp } from '@react-navigation/stack';
 
-type InitialSetupScreenProps = {
-  navigation: StackNavigationProp<any>;
-};
-
-const InitialSetupScreen: React.FC<InitialSetupScreenProps> = ({ navigation }) => {
+const InitialSetupScreen = () => {
   const { updateUserName, setIsFirstLaunch } = useExpenses();
   const [name, setName] = useState('');
+  const navigation = useNavigation();
 
   const handleSubmit = () => {
     if (name.trim()) {
       updateUserName(name.trim());
       setIsFirstLaunch(false);
-      navigation.replace('MainTabs');
+      navigation.reset({
+        index: 0,
+        routes: [{ name: 'Main' }],
+      });
     }
   };
 
@@ -31,6 +31,7 @@ const InitialSetupScreen: React.FC<InitialSetupScreenProps> = ({ navigation }) =
         placeholderTextColor="#999"
       />
       <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+
         <Text style={styles.buttonText}>Comenzar</Text>
       </TouchableOpacity>
     </View>
@@ -52,6 +53,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     textAlign: 'center',
   },
+
   subtitle: {
     fontSize: 18,
     color: '#333',
@@ -65,6 +67,7 @@ const styles = StyleSheet.create({
     padding: 10,
     marginBottom: 20,
     fontSize: 16,
+    color: '#333',
   },
   button: {
     backgroundColor: '#FF69B4',
