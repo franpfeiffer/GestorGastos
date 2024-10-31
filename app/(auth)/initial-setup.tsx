@@ -1,27 +1,24 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { useExpenses } from '../contexts/ExpenseContext';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
+import { useRouter } from 'expo-router';
+import { useExpenses } from '../../contexts/ExpenseContext';
 
-const InitialSetupScreen = () => {
+export default function InitialSetupScreen() {
   const { updateUserName, setIsFirstLaunch } = useExpenses();
   const [name, setName] = useState('');
-  const navigation = useNavigation();
+  const router = useRouter();
 
   const handleSubmit = () => {
     if (name.trim()) {
       updateUserName(name.trim());
       setIsFirstLaunch(false);
-      navigation.reset({
-        index: 0,
-        routes: [{ name: 'Main' }],
-      });
+      router.replace('/(tabs)');
     }
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Bienvenida a tu app de gastos</Text>
+      <Text style={styles.title}>Bienvenido/a a tu app de gastos</Text>
       <Text style={styles.subtitle}>¿Cómo te llamas?</Text>
       <TextInput
         style={styles.input}
@@ -31,12 +28,11 @@ const InitialSetupScreen = () => {
         placeholderTextColor="#999"
       />
       <TouchableOpacity style={styles.button} onPress={handleSubmit}>
-
         <Text style={styles.buttonText}>Comenzar</Text>
       </TouchableOpacity>
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -53,7 +49,6 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     textAlign: 'center',
   },
-
   subtitle: {
     fontSize: 18,
     color: '#333',
@@ -83,4 +78,3 @@ const styles = StyleSheet.create({
   },
 });
 
-export default InitialSetupScreen;

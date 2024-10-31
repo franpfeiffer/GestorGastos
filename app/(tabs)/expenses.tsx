@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
-
 import { View, Text, StyleSheet, FlatList, TouchableOpacity, TextInput, Modal } from 'react-native';
-import { useExpenses } from '../contexts/ExpenseContext';
+import { useExpenses } from '../../contexts/ExpenseContext';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 
-const ExpensesScreen = () => {
-
+export default function ExpensesScreen() {
   const { expenses, addExpense, removeExpense, updateExpense } = useExpenses();
   const [modalVisible, setModalVisible] = useState(false);
   const [editingExpense, setEditingExpense] = useState(null);
@@ -26,17 +24,14 @@ const ExpensesScreen = () => {
       setDescription('');
       setAmount('');
       setCategory('');
-
       setModalVisible(false);
     }
   };
-
 
   const handleEditExpense = () => {
     if (description && amount && category && editingExpense) {
       const updatedExpense = {
         ...editingExpense,
-
         description,
         amount: parseFloat(amount),
         category,
@@ -44,7 +39,6 @@ const ExpensesScreen = () => {
       updateExpense(updatedExpense);
       setEditingExpense(null);
       setDescription('');
-
       setAmount('');
       setCategory('');
       setModalVisible(false);
@@ -61,20 +55,17 @@ const ExpensesScreen = () => {
 
   return (
     <View style={styles.container}>
-
       <Text style={styles.title}>Gastos</Text>
       <TouchableOpacity style={styles.addButton} onPress={() => setModalVisible(true)}>
         <Text style={styles.addButtonText}>Agregar Gasto</Text>
       </TouchableOpacity>
       <FlatList
-
         data={expenses.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <TouchableOpacity style={styles.expenseItem} onPress={() => openEditModal(item)}>
             <View>
               <Text style={styles.expenseDescription}>{item.description}</Text>
-
               <Text style={styles.expenseCategory}>{item.category}</Text>
               <Text style={styles.expenseDate}>
                 {format(new Date(item.date), 'dd MMM yyyy', { locale: es })}
@@ -84,7 +75,6 @@ const ExpensesScreen = () => {
           </TouchableOpacity>
         )}
       />
-
       <Modal
         animationType="slide"
         transparent={true}
@@ -99,37 +89,32 @@ const ExpensesScreen = () => {
             <TextInput
               style={styles.input}
               placeholder="Descripción"
+              placeholderTextColor="#999"
               value={description}
-
               onChangeText={setDescription}
             />
             <TextInput
               style={styles.input}
-
               placeholder="Monto"
+              placeholderTextColor="#999"
               value={amount}
-
               onChangeText={setAmount}
               keyboardType="numeric"
-
             />
             <TextInput
               style={styles.input}
               placeholder="Categoría"
-
+              placeholderTextColor="#999"
               value={category}
               onChangeText={setCategory}
             />
             <TouchableOpacity
-
               style={styles.submitButton}
               onPress={editingExpense ? handleEditExpense : handleAddExpense}
             >
               <Text style={styles.submitButtonText}>
-
                 {editingExpense ? 'Actualizar' : 'Agregar'}
               </Text>
-
             </TouchableOpacity>
             {editingExpense && (
               <TouchableOpacity
@@ -138,24 +123,19 @@ const ExpensesScreen = () => {
                   removeExpense(editingExpense.id);
                   setModalVisible(false);
                   setEditingExpense(null);
-
                 }}
               >
                 <Text style={styles.deleteButtonText}>Eliminar</Text>
               </TouchableOpacity>
             )}
-
-            
             <TouchableOpacity
               style={styles.cancelButton}
               onPress={() => {
-
                 setModalVisible(false);
                 setEditingExpense(null);
                 setDescription('');
                 setAmount('');
                 setCategory('');
-
               }}
             >
               <Text style={styles.cancelButtonText}>Cancelar</Text>
@@ -165,14 +145,12 @@ const ExpensesScreen = () => {
       </Modal>
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
-
   container: {
     flex: 1,
     backgroundColor: '#FFF',
-
     padding: 20,
   },
   title: {
@@ -182,15 +160,12 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   addButton: {
-
     backgroundColor: '#FF69B4',
-
     padding: 10,
     borderRadius: 5,
     marginBottom: 20,
   },
   addButtonText: {
-
     color: '#FFF',
     textAlign: 'center',
     fontWeight: 'bold',
@@ -198,7 +173,6 @@ const styles = StyleSheet.create({
   expenseItem: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-
     alignItems: 'center',
     paddingVertical: 10,
     borderBottomWidth: 1,
@@ -219,7 +193,6 @@ const styles = StyleSheet.create({
   expenseAmount: {
     fontSize: 16,
     fontWeight: 'bold',
-
     color: '#FF4136',
   },
   modalContainer: {
@@ -232,7 +205,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFF',
     padding: 20,
     borderRadius: 10,
-
     width: '80%',
   },
   modalTitle: {
@@ -247,6 +219,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     padding: 10,
     marginBottom: 10,
+    color: '#333',
   },
   submitButton: {
     backgroundColor: '#FF69B4',
@@ -263,7 +236,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#FF4136',
     padding: 10,
     borderRadius: 5,
-
     marginTop: 10,
   },
   deleteButtonText: {
@@ -283,5 +255,3 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 });
-
-export default ExpensesScreen;

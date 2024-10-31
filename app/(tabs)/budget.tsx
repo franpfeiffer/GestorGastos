@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
-import { useExpenses } from '../contexts/ExpenseContext';
+import { useExpenses } from '../../contexts/ExpenseContext';
 
-const BudgetScreen = () => {
+export default function BudgetScreen() {
   const { budget, updateBudget } = useExpenses();
   const [newBudget, setNewBudget] = useState(budget.toString());
 
@@ -15,19 +15,19 @@ const BudgetScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Presupuesto</Text>
+      <Text style={styles.title}>Presupuesto Mensual</Text>
       <View style={styles.budgetContainer}>
-        <Text style={styles.budgetTitle}>Presupuesto actual</Text>
+        <Text style={styles.budgetLabel}>Presupuesto actual:</Text>
         <Text style={styles.budgetAmount}>${budget.toFixed(2)}</Text>
       </View>
-      <View style={styles.updateContainer}>
-        <Text style={styles.updateTitle}>Actualizar presupuesto</Text>
+      <View style={styles.inputContainer}>
         <TextInput
           style={styles.input}
           value={newBudget}
           onChangeText={setNewBudget}
           keyboardType="numeric"
           placeholder="Nuevo presupuesto"
+          placeholderTextColor="#999"
         />
         <TouchableOpacity style={styles.updateButton} onPress={handleUpdateBudget}>
           <Text style={styles.updateButtonText}>Actualizar</Text>
@@ -35,7 +35,7 @@ const BudgetScreen = () => {
       </View>
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -43,21 +43,19 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFF',
     padding: 20,
   },
-
   title: {
     fontSize: 24,
     fontWeight: 'bold',
     color: '#FF69B4',
     marginBottom: 20,
   },
-
   budgetContainer: {
     backgroundColor: '#FFB6C1',
     padding: 20,
     borderRadius: 10,
     marginBottom: 20,
   },
-  budgetTitle: {
+  budgetLabel: {
     fontSize: 18,
     color: '#333',
     marginBottom: 5,
@@ -65,39 +63,28 @@ const styles = StyleSheet.create({
   budgetAmount: {
     fontSize: 32,
     fontWeight: 'bold',
-
     color: '#333',
   },
-  updateContainer: {
-    backgroundColor: '#FFF',
-    padding: 20,
-    borderRadius: 10,
-    borderWidth: 1,
-    borderColor: '#FFB6C1',
-  },
-  updateTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#333',
-    marginBottom: 10,
+  inputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   input: {
+    flex: 1,
     borderWidth: 1,
     borderColor: '#DDD',
     borderRadius: 5,
     padding: 10,
-    marginBottom: 10,
+    marginRight: 10,
+    color: '#333',
   },
   updateButton: {
     backgroundColor: '#FF69B4',
-    padding: 10,
+    padding:  10,
     borderRadius: 5,
   },
   updateButtonText: {
     color: '#FFF',
-    textAlign: 'center',
     fontWeight: 'bold',
   },
 });
-
-export default BudgetScreen;
